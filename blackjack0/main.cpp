@@ -6,10 +6,33 @@
 //  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
-#include <iostream>
+//#include <iostream>
+#include <array>
+#include <vector>
+#include <deque>
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+#include <unordered_map>
+#include <assert.h>
+
+
+#include "Card.hpp"
+#include "Deck.hpp"
+#include "VisualGame.hpp"
+
+
+
+
+
+
+//using namespace  BlackJack;
+
+int main(int argc, const char * argv[])
+{
+    
+    VisualGame game;
+    
+    game.gameLoop();
+    
+    
     return 0;
 }
