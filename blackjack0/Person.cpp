@@ -3,14 +3,21 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
 #include "VisualGame.hpp"
 #include "Person.hpp"
 
 
-//void VisualGame::showText(uint y, uint x, const char* format, ...);
+template<typename T> std::string vectorToString(std::vector<T> elements)
+{
+    std::string result;
+    for (auto e : elements)
+    {
+        result = result + ((result.size()>0)?" or ":"") + std::to_string(e);
+    }
+    return result;
+}
 
 Person::Person(std::string name, bool showPoints):
     m_name(name),
@@ -31,7 +38,6 @@ std::vector<Card> Person::collectCards()
     m_cards.clear();
     return collected_cards;
 }
-
 
 std::vector<int> Person::getPoints()
 {
@@ -74,14 +80,6 @@ int Person::getMaxPoints()
     return *std::max_element(points.begin(), points.end());
 }
 
-template<typename T> std::string vectorToString(std::vector<T> elements)
-{
-    std::string result;
-    for (auto e : elements)
-        result = result + " " + std::to_string(e);
-    return result;
-}
-
 void Person:: draw(uint y, uint x)
 {
     VisualGame::showText(y+1, x-15, m_name.c_str());
@@ -105,7 +103,7 @@ void Person:: draw(uint y, uint x)
 
 void Person::showPoints(bool show)
 {
-    m_showPoints = true;
+    m_showPoints = show;
 }
 
 void Person::showCards()
@@ -121,8 +119,3 @@ size_t Person::numCards() const
     return m_cards.size();
 }
 
-Player::Player(std::string name):
-    Person(name)
-{
-    
-}

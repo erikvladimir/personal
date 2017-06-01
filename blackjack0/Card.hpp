@@ -3,7 +3,6 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
 #ifndef Card_hpp
@@ -27,10 +26,11 @@ private:
     Suit m_suit;
     CardName m_name;
     bool m_visible;
+    
 public:
     Card (Suit, CardName);
     std::string print() const;
-    uint16_t value();
+    uint16_t value() const;
     void setVisible(bool visible = true);
     void draw(uint y = 0, uint x = 0) const;
 };

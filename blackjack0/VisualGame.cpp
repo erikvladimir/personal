@@ -3,7 +3,6 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
 #include "VisualGame.hpp"
@@ -11,34 +10,19 @@
 
 #include <curses.h>
 
-#define TICKRATE 100
 
-#define WORLD_WIDTH 50
-#define WORLD_HEIGHT 20
-
-#define USING_CURSES
-
-
-#ifdef USING_CURSES
-#define PRINT printw
-#define GETC getch
-#else
-#define PRINT printf
-#endif
 
 void VisualGame::initialise()
 {
-    
     setlocale (LC_ALL, "");
     initscr();
-    
-    
     
     if(has_colors() == FALSE)
     {	endwin();
         printf("Your terminal does not support color\n");
         exit(1);
     }
+    
     start_color();
     noecho();
     
@@ -50,12 +34,10 @@ void VisualGame::initialise()
     init_pair(5, COLOR_BLACK, COLOR_YELLOW);
     init_pair(6, COLOR_WHITE, COLOR_BLUE);
     
-    
     init_pair(10, COLOR_BLACK, COLOR_WHITE);
     init_pair(11, COLOR_RED, COLOR_WHITE);
     
     cbreak();
-    //timeout(TICKRATE);
     keypad(stdscr, TRUE);
 }
 
@@ -154,8 +136,8 @@ void VisualGame::showMessageBox(uint y, uint x, uint lines, uint columns,  std::
             printw(" ");
         }
     }
-    int posy = y + lines/2;
-    int posx = x+columns/2 - message.size()/2;
+    int posy = y + (lines/2);
+    int posx = x + (columns/2) - (message.size()/2);
     move(posy, posx);
     printw(message.c_str());
     attroff(COLOR_PAIR(5));
@@ -170,10 +152,8 @@ void VisualGame::draw()
     drawRoundMenu();
     drawScores();
     
-    //showText(6, 5, "Dealer :");
     m_dealer.draw(7,  20);
     
-    //showText(13, 5, "Player :");
     m_player.draw(14, 20);
     
     
@@ -184,8 +164,6 @@ void VisualGame::draw()
     
     // put cursor out of sight
     move(0, 75);
-    
-    
     
     refresh();
 }

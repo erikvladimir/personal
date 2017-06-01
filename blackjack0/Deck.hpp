@@ -3,7 +3,6 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
 #ifndef Deck_hpp

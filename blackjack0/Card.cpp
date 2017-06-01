@@ -3,7 +3,6 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
 #include "Card.hpp"
@@ -26,7 +25,7 @@ Card::Card (Suit suit, CardName name):
     m_visible(true)
 {}
 
-uint16_t Card::value()
+uint16_t Card::value() const
 {
     if (m_name >= CardName::JACK && m_name <= CardName::KING)
         return CardName::C10;
@@ -38,7 +37,7 @@ std::string Card::print() const
 
     std::string r;
     
-    //if (!m_visible) return std::string("[?,?]");
+    if (!m_visible) return std::string("[?,?]");
     
     r = std::string("[");
     if (name_string.find(m_name) != name_string.end())

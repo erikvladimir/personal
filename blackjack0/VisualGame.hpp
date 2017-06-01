@@ -3,7 +3,6 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
 #ifndef VisualGame_hpp
@@ -12,22 +11,25 @@
 #include <stdio.h>
 
 #include "Game.hpp"
+#include "Person.hpp"
 
 class VisualGame : public Game
 {
+    
 private:
     void drawScores() const;
     void drawRoundMenu() const;
+    void draw(uint y, uint x, Person person) const;
+protected:
+    void initialise();
+    void deinitialise();
+    void showMessageBox(uint y, uint x, uint lines, uint columns, std::string message);
+    virtual void draw();
 public:
     VisualGame();
     ~VisualGame();
     
-    void initialise();
-    void deinitialise();
-    
-    virtual void draw();
     static void showText(uint y, uint x, const char* format, ...);
-    void showMessageBox(uint y, uint x, uint lines, uint columns, std::string message);
 };
 
 
