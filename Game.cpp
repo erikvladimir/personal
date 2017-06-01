@@ -89,15 +89,19 @@ void Game::dealerPlays()
     draw();
     sleep(2);
     
+    int p_dealer = 0;
+    
     do{
         
-        auto points = m_dealer.getPoints();
-        int p_dealer = *std::max_element(points.begin(), points.end());
+        auto d_points = m_dealer.getPoints();
+        p_dealer = *std::max_element(d_points.begin(), d_points.end());
         
-        if (p_dealer == 21)
+        // dealer must hit until the sum is less than 17
+        // dealer must hit in soft-17
+        if (p_dealer >= 17 &&
+            !(p_dealer == 17 && d_points.size() == 1) ) // dealer must also hit in soft-17
         {
-            m_status_msg = "Dealer wins";
-            m_state = WAIT;
+            // no more hits for the dealer
             break;
         }
         
@@ -107,7 +111,50 @@ void Game::dealerPlays()
         sleep(2);
     } while(true);
     
+    
+    auto p_points = m_player.getPoints();
+    int p_player = *std::max_element(p_points.begin(), p_points.end());
+    
+    m_status_msg = "";
+    
+    if (p_player > 21) m_status_msg += "dealer busted, ";
+    if (p_dealer > 21) m_status_msg += "player busted, ";
+    
+    if ( p_dealer <= 21 )
+    {
+        if ( p_dealer == p_player )
+        {
+            m_status_msg += "it is a tie 1";
+        }
+        else if ( p_dealer > p_player )
+        {
+            m_status_msg += "dealer wins";
+        }
+        else if ( p_dealer < p_player && p_player <= 21)
+        {
+            m_status_msg += "player wins wins";
+        }
+        else
+        {
+            m_status_msg += "it is a tie 2";
+        }
+
+    }
+    else if (p_player <= 21)
+    {
+        m_status_msg += "player wins wins";
+    }
+    else
+    {
+        m_status_msg += "it is a tie 3";
+    }
+    
+    draw();
+    //getch();
     getch();
+    
+    m_status_msg = "";
+    m_state = WAIT;
 }
 
 void Game::gameLoop()
