@@ -18,6 +18,7 @@
 const size_t RESHUFFLE_RATE_ROUNDS = 6;
 
 Game::Game():
+    m_scores{},
     m_state(GameState::WELCOME),
     m_deck(),
     m_player("Player"),
@@ -68,38 +69,34 @@ void Game::draw()
     printf("to be overriden draw method\n");
 }
 
-void Game::checkGame()
-{
-    auto points = m_player.getPoints();
-    int p_player = *std::max_element(points.begin(), points.end());
-    if (p_player > 21)
-    {
-        m_status_msg = "you busted!! you loss";
-        m_state = WAIT;
-    }
-        
-}
+
 
 void Game::dealerPlays()
 {
+    
     m_dealer.showPoints();
     m_dealer.showCards();
     
+    m_state = DEALER_HAND;
     
     draw();
     sleep(2);
     
-    int p_dealer = 0;
+    auto p_points = m_player.getPoints();
+    int p_player = *std::max_element(p_points.begin(), p_points.end());
+    
+    // on player bust, dealer does not need to play his hand
+    if (p_player > 21) return;
     
     do{
         
         auto d_points = m_dealer.getPoints();
-        p_dealer = *std::max_element(d_points.begin(), d_points.end());
+        int p_dealer = *std::max_element(d_points.begin(), d_points.end());
         
         // dealer must hit until the sum is less than 17
         // dealer must hit in soft-17
         if (p_dealer >= 17 &&
-            !(p_dealer == 17 && d_points.size() == 1) ) // dealer must also hit in soft-17
+            !(p_dealer == 17 && d_points.size() > 1) ) // dealer must also hit in soft-17
         {
             // no more hits for the dealer
             break;
@@ -110,50 +107,67 @@ void Game::dealerPlays()
         draw();
         sleep(2);
     } while(true);
-    
-    
-    auto p_points = m_player.getPoints();
-    int p_player = *std::max_element(p_points.begin(), p_points.end());
-    
-    m_status_msg = "";
-    
-    if (p_player > 21) m_status_msg += "dealer busted, ";
-    if (p_dealer > 21) m_status_msg += "player busted, ";
-    
-    if ( p_dealer <= 21 )
-    {
-        if ( p_dealer == p_player )
-        {
-            m_status_msg += "it is a tie 1";
-        }
-        else if ( p_dealer > p_player )
-        {
-            m_status_msg += "dealer wins";
-        }
-        else if ( p_dealer < p_player && p_player <= 21)
-        {
-            m_status_msg += "player wins wins";
-        }
-        else
-        {
-            m_status_msg += "it is a tie 2";
-        }
+}
 
-    }
-    else if (p_player <= 21)
+Game::RoundWinner Game::checkWinner(int p_player, int p_dealer)
+{
+    
+    if (p_player > 21 && p_dealer > 21)
     {
-        m_status_msg += "player wins wins";
+        return RoundWinner::DEALER;
+    }
+    else if (p_player == p_dealer)
+    {
+        return RoundWinner::TIE;
+    }
+    else if (p_player > p_dealer)
+    {
+        if (p_player <= 21)
+            return RoundWinner::PLAYER;
+        else
+            return RoundWinner::DEALER;
     }
     else
     {
-        m_status_msg += "it is a tie 3";
+        if (p_dealer <= 21)
+            return RoundWinner::DEALER;
+        else
+            return RoundWinner::PLAYER;
     }
-    
-    draw();
-    //getch();
-    getch();
+
+    return RoundWinner::TIE;
+}
+
+void Game::checkGame()
+{
+    int p_dealer = m_dealer.getMaxPoints();
+    int p_player = m_player.getMaxPoints();
     
     m_status_msg = "";
+    
+    if (p_player == 21 && m_player.numCards() == 2) m_status_msg += "player blackjacked, ";
+    if (p_dealer == 21 && m_dealer.numCards() == 2) m_status_msg += "dealer blackjacked, ";
+    
+    if (p_player > 21) m_status_msg += "player busted, ";
+    if (p_dealer > 21) m_status_msg += "player busted, ";
+    
+    RoundWinner result = checkWinner(p_player, p_dealer);
+    if (result == RoundWinner::TIE)
+    {
+        m_status_msg += "it is a tie";
+        m_scores.ties++;
+    }
+    else if (result == RoundWinner::DEALER)
+    {
+        m_status_msg += "dealer wins";
+        m_scores.dealer++;
+    }
+    else
+    {
+        m_status_msg += "player wins";
+        m_scores.player++;
+    }
+
     m_state = WAIT;
 }
 
@@ -163,35 +177,52 @@ void Game::gameLoop()
 
     fflush(stdin);
     
+    if (m_state == PLAY &&
+        m_player.getMaxPoints() == 21 &&
+        m_player.numCards() == 2)
+    {
+        m_status_msg = "player backjack!!";
+        draw();
+        sleep(2);
+        dealerPlays();
+        checkGame();
+    }
+    
     do
     {
         draw();
         
         c = getch();
-        if (c == 'x' || c == 'X') break;
+        c = tolower(c);
+        if (c == 'x') break;
         
         if (m_state == PLAY)
         {
-            switch (c)
+            if (c == 'h')
             {
-                case 'h':
-                case 'H':
-                    m_player.giveCard(m_deck.pop());
-                    break;
-                case 's':
-                case 'S':
+                m_player.giveCard(m_deck.pop());
+                
+                int p_player = m_player.getMaxPoints();
+                
+                if (p_player >= 21)
+                {
                     dealerPlays();
-                    break;
+                    checkGame();
+                }
+            }
+            else if (c == 's')
+            {
+                dealerPlays();
+                checkGame();
             }
         }
-        
-        if (m_state == WAIT)
+        else if (m_state == WAIT)
         {
             initialiseRound();
             m_status_msg = "";
             m_state = PLAY;
         }
-        checkGame();
+
 
     }while(true);
     

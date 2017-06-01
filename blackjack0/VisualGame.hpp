@@ -16,6 +16,7 @@
 class VisualGame : public Game
 {
 private:
+    void drawScores() const;
     void drawRoundMenu() const;
 public:
     VisualGame();

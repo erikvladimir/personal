@@ -48,6 +48,7 @@ void VisualGame::initialise()
     init_pair(3, COLOR_BLACK, COLOR_WHITE);
     init_pair(4, COLOR_BLUE, COLOR_WHITE);
     init_pair(5, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(6, COLOR_WHITE, COLOR_BLUE);
     
     
     init_pair(10, COLOR_BLACK, COLOR_WHITE);
@@ -76,20 +77,55 @@ VisualGame::~VisualGame()
 
 void VisualGame::drawRoundMenu() const
 {
-    attron(COLOR_PAIR(1));
-    move(1, 15);
-    printw(" [H] : HIT  ");
-    attroff(COLOR_PAIR(1));
+    constexpr uint line = 22;
+    if (m_state == PLAY)
+    {
+        attron(COLOR_PAIR(1));
+        move(line, 15);
+        printw(" [H] : HIT  ");
+        attroff(COLOR_PAIR(1));
     
-    attron(COLOR_PAIR(2));
-    move(1, 35);
-    printw(" [S] : STAND  ");
-    attroff(COLOR_PAIR(2));
+        attron(COLOR_PAIR(2));
+        move(line, 35);
+        printw(" [S] : STAND  ");
+        attroff(COLOR_PAIR(2));
     
-    attron(COLOR_PAIR(3));
-    move(1, 55);
-    printw(" [X] : EXIT  ");
-    attroff(COLOR_PAIR(3));
+        attron(COLOR_PAIR(3));
+        move(line, 55);
+        printw(" [X] : EXIT  ");
+        attroff(COLOR_PAIR(3));
+    }
+    else if (m_state == WAIT)
+    {
+        attron(COLOR_PAIR(3));
+        move(line, 28);
+        printw("    Press any key to continue  ");
+        attroff(COLOR_PAIR(3));
+    }
+    else if (m_state == DEALER_HAND)
+    {
+        attron(COLOR_PAIR(3));
+        move(line, 28);
+        printw("    Dealer is playing its hand  ");
+        attroff(COLOR_PAIR(3));
+    }
+}
+
+void VisualGame::drawScores() const
+{
+    attron(COLOR_PAIR(6));
+    constexpr uint line = 1;
+    constexpr uint column = 6;
+    for (uint i=0; i<4; i++)
+    {
+        move(line+i, column);
+        printw("               ");
+    }
+    move(line,   column);  printw(" Scores:      ");
+    move(line+1, column);  printw(" Player:  %2u ", m_scores.player);
+    move(line+2, column);  printw(" Dealer:  %2u ", m_scores.dealer);
+    move(line+3, column);  printw(" Ties:    %2u ", m_scores.ties);
+    attroff(COLOR_PAIR(6));
 }
 
 
@@ -124,7 +160,6 @@ void VisualGame::showMessageBox(uint y, uint x, uint lines, uint columns,  std::
     printw(message.c_str());
     attroff(COLOR_PAIR(5));
     
-    //getch();
 }
 
 void VisualGame::draw()
@@ -133,17 +168,18 @@ void VisualGame::draw()
     wclear(stdscr);
     
     drawRoundMenu();
+    drawScores();
     
     //showText(6, 5, "Dealer :");
-    m_dealer.draw(5,  20);
+    m_dealer.draw(7,  20);
     
     //showText(13, 5, "Player :");
-    m_player.draw(12, 20);
+    m_player.draw(14, 20);
     
     
     if (m_status_msg.size() > 0)
     {
-        showMessageBox(18, 8, 5, 60 , m_status_msg);
+        showMessageBox(1, 23, 4, 50, m_status_msg);
     }
     
     // put cursor out of sight

@@ -25,10 +25,12 @@ public:
     void giveCard(Card card, bool visible = true);
     std::vector<Card> collectCards();
     std::vector<int> getPoints();
+    int getMaxPoints();
     
     void draw(uint y = 0, uint x = 0);
     void showPoints(bool show = true);
     void showCards();
+    size_t numCards() const;
 };
 
 

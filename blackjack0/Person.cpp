@@ -67,6 +67,13 @@ std::vector<int> Person::getPoints()
     return results;
 }
 
+int Person::getMaxPoints()
+{
+    auto points = getPoints();
+    if (points.size() == 0) return 0;
+    return *std::max_element(points.begin(), points.end());
+}
+
 template<typename T> std::string vectorToString(std::vector<T> elements)
 {
     std::string result;
@@ -107,6 +114,11 @@ void Person::showCards()
     {
         card.setVisible(true);
     }
+}
+
+size_t Person::numCards() const
+{
+    return m_cards.size();
 }
 
 Player::Player(std::string name):

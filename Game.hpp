@@ -17,13 +17,24 @@
 class Game
 {
 protected:
-    enum GameState {WELCOME, START, PLAY, END, WAIT};
+    enum GameState {WELCOME, START, PLAY, DEALER_HAND, END, WAIT};
+    enum RoundWinner {PLAYER, DEALER, TIE};
+    
+    struct GameScores
+    {
+        uint player;
+        uint dealer;
+        uint ties;
+    } m_scores;
+    
     GameState m_state;
     Deck m_deck;
     Player m_player;
     Person m_dealer;
     size_t m_roundCount;
     std::string m_status_msg;
+    
+    static RoundWinner checkWinner(int points_player, int points_dealer);
 public:
     Game();
     virtual ~Game();
