@@ -1,5 +1,5 @@
 CPP=g++
-CPPFLAGS=-std=c++11
+CPPFLAGS=-std=c++14
 
 src = $(wildcard *.cpp)
 obj = $(src:.cpp=.o)
