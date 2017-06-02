@@ -23,7 +23,7 @@ private:
     void dealerPlays();
     void checkGame();
     
-    virtual void draw();
+    virtual void draw() = 0;
     
 protected:
     

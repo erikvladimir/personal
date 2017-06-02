@@ -9,12 +9,7 @@
 #define Card_hpp
 
 #include <iostream>
-#include <array>
-#include <vector>
-#include <deque>
 #include <cstdlib>
-
-
 
 enum Suit {HEARTS, DIAMONDS, CLUBS, SPADES};
 

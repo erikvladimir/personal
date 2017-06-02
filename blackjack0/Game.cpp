@@ -26,7 +26,6 @@ Game::Game():
 {
     m_deck.suffle();
     initialiseRound();
-    
 }
 
 Game::~Game()
@@ -63,11 +62,6 @@ void Game::initialiseRound()
 void Game::finishRound()
 {
     
-}
-
-void Game::draw()
-{
-    printf("to be overriden draw method\n");
 }
 
 void Game::dealerPlays()

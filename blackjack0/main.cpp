@@ -20,19 +20,10 @@
 #include "VisualGame.hpp"
 
 
-
-
-
-
-//using namespace  BlackJack;
-
 int main(int argc, const char * argv[])
 {
-    
-    VisualGame game;
-    
-    game.gameLoop();
-    
+    Game *game = &VisualGame::getInstance();
+    game->gameLoop();
     
     return 0;
 }

@@ -13,13 +13,19 @@
 #include "Game.hpp"
 #include "Person.hpp"
 
+/**
+ * This class contains all the code for the visual output.
+ * The logic is still in class Game.
+ */
 class VisualGame : public Game
 {
-    
+
 private:
     void drawScores() const;
     void drawRoundMenu() const;
     void draw(uint y, uint x, Person person) const;
+    static VisualGame * single_instance;
+
 protected:
     void initialise();
     void deinitialise();
@@ -30,6 +36,15 @@ public:
     ~VisualGame();
     
     static void showText(uint y, uint x, const char* format, ...);
+    
+    // Singleton Patten
+    static VisualGame& getInstance()
+    {
+        static VisualGame    instance;
+        return instance;
+    }
+    VisualGame(VisualGame const&) = delete;
+    void operator=(VisualGame const&) = delete;
 };
 
 
