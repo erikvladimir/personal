@@ -5,6 +5,8 @@
 //  Created by Erik V. Ortega on 31/05/2017.
 //
 
+#include <algorithm>
+
 #include "VisualGame.hpp"
 #include "Person.hpp"
 
