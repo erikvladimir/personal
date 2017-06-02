@@ -7,19 +7,18 @@
 
 #include "VisualGame.hpp"
 
-
 #include <curses.h>
 
 
-
-void VisualGame::initialise()
+VisualGame::VisualGame():
+    Game()
 {
     setlocale (LC_ALL, "");
     initscr();
     
-    if(has_colors() == FALSE)
+    if(has_colors() == false)
     {	endwin();
-        printf("Your terminal does not support color\n");
+        printf("Your terminal does not support color.\n");
         exit(1);
     }
     
@@ -33,28 +32,18 @@ void VisualGame::initialise()
     init_pair(4, COLOR_BLUE, COLOR_WHITE);
     init_pair(5, COLOR_BLACK, COLOR_YELLOW);
     init_pair(6, COLOR_WHITE, COLOR_BLUE);
+    init_pair(7, COLOR_CYAN, COLOR_BLACK);
     
     init_pair(10, COLOR_BLACK, COLOR_WHITE);
     init_pair(11, COLOR_RED, COLOR_WHITE);
     
     cbreak();
-    keypad(stdscr, TRUE);
-}
-
-void VisualGame::deinitialise()
-{
-    endwin();
-}
-
-VisualGame::VisualGame():
-    Game()
-{
-    initialise();
+    keypad(stdscr, true);
 }
 
 VisualGame::~VisualGame()
 {
-    deinitialise();
+     endwin();
 }
 
 void VisualGame::drawRoundMenu() const
@@ -101,17 +90,17 @@ void VisualGame::drawScores() const
     for (uint i=0; i<4; i++)
     {
         move(line+i, column);
-        printw("               ");
+        printw("                 ");
     }
-    move(line,   column);  printw(" Scores:      ");
-    move(line+1, column);  printw(" Player:  %2u ", m_scores.player);
-    move(line+2, column);  printw(" Dealer:  %2u ", m_scores.dealer);
-    move(line+3, column);  printw(" Ties:    %2u ", m_scores.ties);
+    move(line,   column);  printw(" Scores         ");
+    move(line+1, column);  printw("   Player:  %2u ", m_scores.player);
+    move(line+2, column);  printw("   Dealer:  %2u ", m_scores.dealer);
+    move(line+3, column);  printw("   Ties:    %2u ", m_scores.ties);
     attroff(COLOR_PAIR(6));
 }
 
 
-void VisualGame::showText(uint y, uint x, const char* format, ...)
+void VisualGame::showText(uint y, uint x, uint color, const char* format, ...)
 {
     char buff[1000] = "";
     va_list args;
@@ -119,10 +108,10 @@ void VisualGame::showText(uint y, uint x, const char* format, ...)
     vsprintf (buff, format, args);
     va_end (args);
     
-    attron(COLOR_PAIR(0));
+    attron(COLOR_PAIR(color));
     move(y, x);
     printw(buff);
-    attroff(COLOR_PAIR(0));
+    attroff(COLOR_PAIR(color));
 }
 
 void VisualGame::showMessageBox(uint y, uint x, uint lines, uint columns,  std::string message)
@@ -146,20 +135,17 @@ void VisualGame::showMessageBox(uint y, uint x, uint lines, uint columns,  std::
 
 void VisualGame::draw()
 {
-    
     wclear(stdscr);
     
     drawRoundMenu();
     drawScores();
     
-    m_dealer.draw(7,  20);
-    
-    m_player.draw(14, 20);
-    
+    m_dealer.draw(7,  4);
+    m_player.draw(14, 4);
     
     if (m_status_msg.size() > 0)
     {
-        showMessageBox(1, 23, 4, 50, m_status_msg);
+        showMessageBox(1, 26, 4, 50, m_status_msg);
     }
     
     // put cursor out of sight

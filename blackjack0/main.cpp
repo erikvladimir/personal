@@ -3,25 +3,25 @@
 //  blackjack0
 //
 //  Created by Erik V. Ortega on 31/05/2017.
-//  Copyright © 2017 Erik V. Ortega. All rights reserved.
 //
 
-//#include <iostream>
-#include <array>
-#include <vector>
-#include <deque>
 
-#include <unordered_map>
-#include <assert.h>
+#include <string>
 
-
-#include "Card.hpp"
-#include "Deck.hpp"
 #include "VisualGame.hpp"
 
+extern void RunTests();
 
 int main(int argc, const char * argv[])
 {
+    // check and run tests
+    if (argc == 2 && strcmp(argv[1], "test") == 0)
+    {
+        RunTests();
+        return 0;
+    }
+    
+    // run game
     Game *game = &VisualGame::getInstance();
     game->gameLoop();
     

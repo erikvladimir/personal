@@ -14,6 +14,7 @@
 #include <curses.h>
 #include <unistd.h>
 
+// get sure we reshuffle deck every so often
 const size_t RESHUFFLE_RATE_ROUNDS = 6;
 
 Game::Game():
@@ -24,14 +25,13 @@ Game::Game():
     m_dealer("Dealer", false),
     m_roundCount(0)
 {
+    // set random seed
+    std::srand (uint(time(0)));
+    
     m_deck.suffle();
     initialiseRound();
 }
 
-Game::~Game()
-{
-
-}
 
 void Game::initialiseRound()
 {
@@ -59,11 +59,6 @@ void Game::initialiseRound()
     
 }
 
-void Game::finishRound()
-{
-    
-}
-
 void Game::dealerPlays()
 {
     
@@ -75,21 +70,18 @@ void Game::dealerPlays()
     draw();
     sleep(2);
     
-    auto p_points = m_player.getPoints();
-    int p_player = *std::max_element(p_points.begin(), p_points.end());
+    int p_player =  m_player.getMaxPoints();
     
     // on player bust, dealer does not need to play his hand
     if (p_player > 21) return;
     
     do{
-        
-        auto d_points = m_dealer.getPoints();
-        int p_dealer = *std::max_element(d_points.begin(), d_points.end());
+        int p_dealer = m_dealer.getMaxPoints();
         
         // dealer must hit until the sum is less than 17
         // dealer must hit in soft-17
         if (p_dealer >= 17 &&
-            !(p_dealer == 17 && d_points.size() > 1) ) // dealer must also hit in soft-17
+            !(p_dealer == 17 && m_dealer.getPoints().size() > 1) ) // dealer must also hit in soft-17
         {
             // no more hits for the dealer
             break;
@@ -138,26 +130,26 @@ void Game::checkGame()
     
     m_status_msg = "";
     
-    if (p_player == 21 && m_player.numCards() == 2) m_status_msg += "player blackjacked, ";
-    if (p_dealer == 21 && m_dealer.numCards() == 2) m_status_msg += "dealer blackjacked, ";
+    if (p_player == 21 && m_player.numCards() == 2) m_status_msg += "Player blackjack!., ";
+    if (p_dealer == 21 && m_dealer.numCards() == 2) m_status_msg += "Dealer blackjack!., ";
     
-    if (p_player > 21) m_status_msg += "player busted, ";
-    if (p_dealer > 21) m_status_msg += "player busted, ";
+    if (p_player > 21) m_status_msg += "Player bust!. ";
+    if (p_dealer > 21) m_status_msg += "Deaker bust!. ";
     
     RoundWinner result = checkWinner(p_player, p_dealer);
     if (result == RoundWinner::TIE)
     {
-        m_status_msg += "it is a tie";
+        m_status_msg += "It is a tie!.";
         m_scores.ties++;
     }
     else if (result == RoundWinner::DEALER)
     {
-        m_status_msg += "dealer wins";
+        m_status_msg += "Dealer wins.";
         m_scores.dealer++;
     }
     else
     {
-        m_status_msg += "player wins";
+        m_status_msg += "Player wins.";
         m_scores.player++;
     }
 
@@ -166,10 +158,17 @@ void Game::checkGame()
 
 void Game::gameLoop()
 {
-    int c;
+
+    // lambda func to reduce code duplication
+    auto goToDealerHand = [&]() {
+        dealerPlays();
+        checkGame();
+    };
 
     fflush(stdin);
     
+    // check special case in which player makes a blackjack
+    // with first two cards
     if (m_state == PLAY &&
         m_player.getMaxPoints() == 21 &&
         m_player.numCards() == 2)
@@ -177,47 +176,48 @@ void Game::gameLoop()
         m_status_msg = "player backjack!!";
         draw();
         sleep(2);
-        dealerPlays();
-        checkGame();
+        goToDealerHand();
     }
     
+    // we loop and process actions according to current game status
     do
     {
+        // refresh visual output
         draw();
         
-        c = getch();
+        // take a key that will be processed according to current game status
+        char c = getch();
         c = tolower(c);
         if (c == 'x') break;
         
         if (m_state == PLAY)
         {
+            // player hits
             if (c == 'h')
             {
+                // give it a card from deck
                 m_player.giveCard(m_deck.pop());
                 
-                int p_player = m_player.getMaxPoints();
-                
-                if (p_player >= 21)
+                // check for bust or blackjack
+                if (m_player.getMaxPoints() >= 21)
                 {
-                    dealerPlays();
-                    checkGame();
+                    goToDealerHand();
                 }
             }
+            // player stands
             else if (c == 's')
             {
-                dealerPlays();
-                checkGame();
+                goToDealerHand();
             }
         }
         else if (m_state == WAIT)
         {
+            // if we were in wait status and user pressed any key,
+            // we reinitialise the round and move to play status
             initialiseRound();
             m_status_msg = "";
             m_state = PLAY;
         }
-    }while(true);
-    
-    endwin();
-    
+    }while(true);    
     
 }

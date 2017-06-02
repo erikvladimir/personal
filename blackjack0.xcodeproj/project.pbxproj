@@ -13,6 +13,7 @@
 		7D00ED501EDEDECB0025DE32 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D00ED4E1EDEDECB0025DE32 /* Game.cpp */; };
 		7D00ED531EDEDF4D0025DE32 /* Person.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D00ED511EDEDF4D0025DE32 /* Person.cpp */; };
 		7D2367E51EE125D4007F8C64 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 7D2367E41EE125D4007F8C64 /* Makefile */; };
+		7D2367EA1EE15013007F8C64 /* UnitTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D2367E91EE15013007F8C64 /* UnitTests.cpp */; };
 		7D28A10B1EDF21CC003372C0 /* VisualGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D28A1091EDF21CC003372C0 /* VisualGame.cpp */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		7D00ED521EDEDF4D0025DE32 /* Person.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Person.hpp; sourceTree = "<group>"; };
 		7D2367E41EE125D4007F8C64 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = blackjack0/Makefile; sourceTree = "<group>"; };
 		7D2367E61EE129DF007F8C64 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		7D2367E91EE15013007F8C64 /* UnitTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnitTests.cpp; sourceTree = "<group>"; };
 		7D28A1091EDF21CC003372C0 /* VisualGame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VisualGame.cpp; sourceTree = "<group>"; };
 		7D28A10A1EDF21CC003372C0 /* VisualGame.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VisualGame.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				7D00ED411EDE9FDF0025DE32 /* main.cpp */,
+				7D2367E91EE15013007F8C64 /* UnitTests.cpp */,
 			);
 			path = blackjack0;
 			sourceTree = "<group>";
@@ -168,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D00ED4D1EDEDC670025DE32 /* Deck.cpp in Sources */,
+				7D2367EA1EE15013007F8C64 /* UnitTests.cpp in Sources */,
 				7D28A10B1EDF21CC003372C0 /* VisualGame.cpp in Sources */,
 				7D00ED421EDE9FDF0025DE32 /* main.cpp in Sources */,
 				7D00ED4A1EDEDB760025DE32 /* Card.cpp in Sources */,

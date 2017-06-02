@@ -49,12 +49,10 @@ Deck::Deck()
 void Deck::suffle()
 {
     // Fisher–Yates shuffle agorithm
-    std::srand (uint(time(0)));
     const size_t n = m_cards.size();
     for (size_t i = n-1; i >= 1; i--)
     {
         size_t j = size_t(std::rand() % i );
-        std::cout << j << " ";
         std::swap(m_cards[i], m_cards[j]);
     }
 }

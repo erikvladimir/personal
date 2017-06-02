@@ -15,7 +15,7 @@
 
 /**
  * This class contains all the code for the visual output.
- * The logic is still in class Game.
+ * The logic is still in parent class Game.
  */
 class VisualGame : public Game
 {
@@ -25,19 +25,18 @@ private:
     void drawRoundMenu() const;
     void draw(uint y, uint x, Person person) const;
     static VisualGame * single_instance;
-
+    VisualGame();
+    
 protected:
-    void initialise();
-    void deinitialise();
     void showMessageBox(uint y, uint x, uint lines, uint columns, std::string message);
     virtual void draw();
+
 public:
-    VisualGame();
-    ~VisualGame();
+    virtual ~VisualGame();
     
-    static void showText(uint y, uint x, const char* format, ...);
+    static void showText(uint y, uint x, uint color, const char* format, ...);
     
-    // Singleton Patten
+    // Singleton Design Pattern
     static VisualGame& getInstance()
     {
         static VisualGame    instance;

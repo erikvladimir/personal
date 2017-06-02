@@ -82,22 +82,24 @@ int Person::getMaxPoints()
 
 void Person:: draw(uint y, uint x)
 {
-    VisualGame::showText(y+1, x-15, m_name.c_str());
-    
+    // draw name and points
+    VisualGame::showText(y+1, x, 0, m_name.c_str());
     if (m_showPoints)
     {
-        VisualGame::showText(y+2, x-15, vectorToString<int>(getPoints()).c_str());
+        VisualGame::showText(y+2, x, 7, " %s pts.", vectorToString<int>(getPoints()).c_str());
     }
     else
     {
-        VisualGame::showText(y+2, x-15, "?");
+        VisualGame::showText(y+2, x, 7, " ? pts.");
     }
     
-    uint offset = 0;
+    // draw cards
+    constexpr uint card_offset = 10u;
+    uint offset = 16;
     for (auto card : m_cards )
     {
         card.draw(y, x + offset);
-        offset += 10;
+        offset += card_offset;
     }
 }
 

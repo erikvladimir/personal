@@ -6,7 +6,9 @@ obj = $(src:.cpp=.o)
 
 LDFLAGS = -lncurses
 
-all: blackjack
+all: clean build test run 
+
+build: blackjack
 
 blackjack: $(obj)
 	$(CPP) -o $@ $^ $(LDFLAGS)
@@ -17,3 +19,7 @@ clean:
 
 run:
 	./blackjack
+
+test:
+	./blackjack test
+

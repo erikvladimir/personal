@@ -6,11 +6,6 @@ Section 1. Introduction
 -----------------------------
 The executable can be run from command line. It is text-based but it uses unicode characters and ncurses library to delivered an improved visual output.
 
-The user (player) can use the following keys when available:
-    (H): Hit, get a new card
-    (S): Stand, pass or end your hand
-    (X): Quit game
-
 Section 2. Compile and Run
 -----------------------------
 
@@ -19,4 +14,16 @@ Section 2. Compile and Run
 
 [Option 2]. make
     As an alternative, a Makefile is also given. Yu can use the following commands:
-make all run
+> make build run
+
+Section 3. Usage
+-----------------------------
+The user (player) can use the following keys when available:
+    (H): Hit, get a new card
+    (S): Stand, pass or end your hand
+    (X): Quit game
+
+Section 4. Unit test
+-----------------------------
+Few unit tests were added to check selected methods, you can run them by
+> make build test

@@ -12,6 +12,10 @@
 
 #include "Card.hpp"
 
+/**
+ * Represents the Dealer or the Player and all associated data 
+ * (cards, points) and allows taking actions (take/return cards, draw).
+ */
 class Person
 {
 private:
