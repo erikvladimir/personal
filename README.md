@@ -22,10 +22,10 @@ make build run
 
 ## Section 3. Usage
 
-The user (player) can use the following keys when available:
-H. Hit, get a new card
-S. Stand, pass or end your hand
-X. Quit game
+The user (player) can use the following **keys** when available:
+* **[H]** : Hit, get a new card
+* **[S]** : Stand, pass or end your hand
+* **[X]** : Quit game
 
 When possible, the dealer will progressively play its hands, and after few instans the results will be displayed.
 

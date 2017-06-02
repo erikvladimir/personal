@@ -22,7 +22,7 @@ int main(int argc, const char * argv[])
     }
     
     // run game
-    Game *game = &VisualGame::getInstance(); //singleton
+    Game * game = VisualGame::getInstance(); //singleton
     game->gameLoop();
     
     return 0;

@@ -38,13 +38,11 @@ public:
     static void DrawRectangle(uint y, uint x, uint lines, uint columns);
     
     // Singleton Design Pattern
-    static VisualGame& getInstance()
+    static VisualGame * getInstance()
     {
-        static VisualGame    instance;
+        static VisualGame *instance = new VisualGame();
         return instance;
     }
-    VisualGame(VisualGame const&) = delete;
-    void operator=(VisualGame const&) = delete;
 };
 
 

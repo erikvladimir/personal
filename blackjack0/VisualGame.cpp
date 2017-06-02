@@ -54,7 +54,7 @@ VisualGame::VisualGame():
 
 VisualGame::~VisualGame()
 {
-     endwin();
+    
 }
 
 /**

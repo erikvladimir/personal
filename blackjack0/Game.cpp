@@ -233,4 +233,5 @@ void Game::gameLoop()
         }
     }while(true);    
     
+    endwin();
 }
