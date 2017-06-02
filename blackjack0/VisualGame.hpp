@@ -35,6 +35,7 @@ public:
     virtual ~VisualGame();
     
     static void showText(uint y, uint x, uint color, const char* format, ...);
+    static void DrawRectangle(uint y, uint x, uint lines, uint columns);
     
     // Singleton Design Pattern
     static VisualGame& getInstance()

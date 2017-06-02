@@ -5,10 +5,9 @@
 //  Created by Erik V. Ortega on 31/05/2017.
 //
 
-#include "VisualGame.hpp"
-
 #include <curses.h>
 
+#include "VisualGame.hpp"
 
 VisualGame::VisualGame():
     Game()
@@ -44,6 +43,42 @@ VisualGame::VisualGame():
 VisualGame::~VisualGame()
 {
      endwin();
+}
+
+/**
+ * Main method that draw all the visual output
+ */
+void VisualGame::draw()
+{
+    wclear(stdscr);
+    
+    drawRoundMenu();
+    drawScores();
+    
+    m_dealer.draw(7,  4);
+    m_player.draw(14, 4);
+    
+    if (m_status_msg.size() > 0)
+    {
+        showMessageBox(1, 26, 4, 50, m_status_msg);
+    }
+    
+    // put cursor out of sight
+    move(0, 75);
+    
+    refresh();
+}
+
+void VisualGame::DrawRectangle(uint y, uint x, uint lines, uint columns)
+{
+    for (uint i=0; i<lines; i++)
+    {
+        move(y+i, x);
+        for (uint j=0; j<columns; j++)
+        {
+            printw(" ");
+        }
+    }
 }
 
 void VisualGame::drawRoundMenu() const
@@ -84,18 +119,26 @@ void VisualGame::drawRoundMenu() const
 
 void VisualGame::drawScores() const
 {
-    attron(COLOR_PAIR(6));
     constexpr uint line = 1;
-    constexpr uint column = 6;
-    for (uint i=0; i<4; i++)
-    {
-        move(line+i, column);
-        printw("                 ");
-    }
-    move(line,   column);  printw(" Scores         ");
-    move(line+1, column);  printw("   Player:  %2u ", m_scores.player);
-    move(line+2, column);  printw("   Dealer:  %2u ", m_scores.dealer);
-    move(line+3, column);  printw("   Ties:    %2u ", m_scores.ties);
+    constexpr uint column = 4;
+    
+    attron(COLOR_PAIR(6));
+    
+    DrawRectangle(line, column, 4, 19);
+    move(line,   column);  printw(" Scores in percent");
+    
+    const uint sum_wins = m_scores.player + m_scores.dealer + m_scores.ties;
+    auto compute_percent =  [](const uint & n, const uint & total) { return (total == 0) ? 0.f : (n * 100.f) / total; };
+    
+    const float player_percent = compute_percent(m_scores.player, sum_wins);
+    const float dealer_percent = compute_percent(m_scores.dealer, sum_wins);
+    const float tie_percent    = compute_percent(m_scores.ties, sum_wins);
+    
+    // percentage needs to be printed like this so it can be properly displayed
+    move(line+1, column);  printw(" Player: %2.1f %s", player_percent, std::string("\u0025").c_str());
+    move(line+2, column);  printw(" Dealer: %2.1f %s", dealer_percent, std::string("\u0025").c_str());
+    move(line+3, column);  printw(" Ties:   %2.1f %s", tie_percent,    std::string("\u0025").c_str());
+    
     attroff(COLOR_PAIR(6));
 }
 
@@ -117,39 +160,11 @@ void VisualGame::showText(uint y, uint x, uint color, const char* format, ...)
 void VisualGame::showMessageBox(uint y, uint x, uint lines, uint columns,  std::string message)
 {
     attron(COLOR_PAIR(5));
-    for (uint i=0; i<lines; i++)
-    {
-        move(y+i, x);
-        for (uint i=0; i<columns; i++)
-        {
-            printw(" ");
-        }
-    }
+    DrawRectangle(y, x, lines, columns);
     int posy = y + (lines/2);
     int posx = x + (columns/2) - int(message.size()/2);
     move(posy, posx);
     printw(message.c_str());
     attroff(COLOR_PAIR(5));
     
-}
-
-void VisualGame::draw()
-{
-    wclear(stdscr);
-    
-    drawRoundMenu();
-    drawScores();
-    
-    m_dealer.draw(7,  4);
-    m_player.draw(14, 4);
-    
-    if (m_status_msg.size() > 0)
-    {
-        showMessageBox(1, 26, 4, 50, m_status_msg);
-    }
-    
-    // put cursor out of sight
-    move(0, 75);
-    
-    refresh();
 }

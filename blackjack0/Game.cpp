@@ -14,6 +14,11 @@
 #include <curses.h>
 #include <unistd.h>
 
+//-----------------------------------------------
+// This file contains the logic of the GAME
+// The visual part is in file Visual Game
+//-----------------------------------------------
+
 // get sure we reshuffle deck every so often
 const size_t RESHUFFLE_RATE_ROUNDS = 6;
 
@@ -59,6 +64,10 @@ void Game::initialiseRound()
     
 }
 
+/** 
+ * Dealer plays its hands, it will stop when it gets anything bigger than 17 excepts in soft-17 case
+ * The hand is played progressively.
+ */
 void Game::dealerPlays()
 {
     
@@ -76,12 +85,13 @@ void Game::dealerPlays()
     if (p_player > 21) return;
     
     do{
+        // TODO: getMaxPoints() and getNumPoints() could be merged to avoid re-computing the points
         int p_dealer = m_dealer.getMaxPoints();
         
         // dealer must hit until the sum is less than 17
         // dealer must hit in soft-17
         if (p_dealer >= 17 &&
-            !(p_dealer == 17 && m_dealer.getPoints().size() > 1) ) // dealer must also hit in soft-17
+            !(p_dealer == 17 && m_dealer.getNumPoints() > 1) ) // dealer must also hit in soft-17
         {
             // no more hits for the dealer
             break;
@@ -156,6 +166,9 @@ void Game::checkGame()
     m_state = WAIT;
 }
 
+/**
+ * Main loop for the game.
+ */
 void Game::gameLoop()
 {
 

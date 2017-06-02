@@ -8,7 +8,6 @@
 #include "VisualGame.hpp"
 #include "Person.hpp"
 
-
 template<typename T> std::string vectorToString(std::vector<T> elements)
 {
     std::string result;
@@ -39,12 +38,12 @@ std::vector<Card> Person::collectCards()
     return collected_cards;
 }
 
-std::vector<int> Person::getPoints()
+std::vector<int> Person::computePoints(std::vector<Card> cards)
 {
     std::vector<int> results= {0};
     
-    // add non ACE
-    for (auto card : m_cards)
+    // add non-ACEs
+    for (auto card : cards)
     {
         int value = card.value();
         
@@ -54,7 +53,7 @@ std::vector<int> Person::getPoints()
     }
     
     // add ACEs, first as ones, and if possible as 11s
-    for (auto card : m_cards)
+    for (auto card : cards)
     {
         for (auto &res : results)
         {
@@ -71,26 +70,39 @@ std::vector<int> Person::getPoints()
     }
     
     return results;
+
 }
 
-int Person::getMaxPoints()
+std::vector<int> Person::getPoints() const
+{
+    return Person::computePoints(m_cards);
+}
+
+int Person::getMaxPoints() const
 {
     auto points = getPoints();
     if (points.size() == 0) return 0;
     return *std::max_element(points.begin(), points.end());
 }
 
+size_t Person::getNumPoints() const
+{
+    auto points = getPoints();
+    return points.size();
+}
+
 void Person:: draw(uint y, uint x)
 {
     // draw name and points
+    constexpr int points_color = 7;
     VisualGame::showText(y+1, x, 0, m_name.c_str());
     if (m_showPoints)
     {
-        VisualGame::showText(y+2, x, 7, " %s pts.", vectorToString<int>(getPoints()).c_str());
+        VisualGame::showText(y+2, x, points_color, " %s pts.", vectorToString<int>(getPoints()).c_str());
     }
     else
     {
-        VisualGame::showText(y+2, x, 7, " ? pts.");
+        VisualGame::showText(y+2, x, points_color, " ? pts.");
     }
     
     // draw cards

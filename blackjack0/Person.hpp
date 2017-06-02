@@ -24,12 +24,15 @@ private:
     bool m_showPoints;
 
 public:
+    static std::vector<int> computePoints(std::vector<Card> cards);
+    
     Person(std::string name, bool showPoints = true);
     
     void giveCard(Card card, bool visible = true);
     std::vector<Card> collectCards();
-    std::vector<int> getPoints();
-    int getMaxPoints();
+    std::vector<int> getPoints() const;
+    int getMaxPoints() const;
+    size_t getNumPoints() const;
     
     void draw(uint y = 0, uint x = 0);
     void showPoints(bool show = true);
