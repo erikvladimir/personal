@@ -137,7 +137,7 @@ void VisualGame::showMessageBox(uint y, uint x, uint lines, uint columns,  std::
         }
     }
     int posy = y + (lines/2);
-    int posx = x + (columns/2) - (message.size()/2);
+    int posx = x + (columns/2) - int(message.size()/2);
     move(posy, posx);
     printw(message.c_str());
     attroff(COLOR_PAIR(5));

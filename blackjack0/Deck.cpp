@@ -30,7 +30,6 @@ std::string Deck::print() const
 
 void Deck::pileCards(const std::vector<Card> &in_cards)
 {
-    //m_cards.emplace_back(in_cards.begin(), 1);//in_cards.size());
     std::copy(in_cards.begin(), in_cards.end(), m_cards.end());
 }
 
@@ -50,7 +49,7 @@ Deck::Deck()
 void Deck::suffle()
 {
     // Fisher–Yates shuffle agorithm
-    std::srand (time(0));
+    std::srand (uint(time(0)));
     const size_t n = m_cards.size();
     for (size_t i = n-1; i >= 1; i--)
     {
