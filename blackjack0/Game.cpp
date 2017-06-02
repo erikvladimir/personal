@@ -144,7 +144,7 @@ void Game::checkGame()
     if (p_dealer == 21 && m_dealer.numCards() == 2) m_status_msg += "Dealer blackjack!., ";
     
     if (p_player > 21) m_status_msg += "Player bust!. ";
-    if (p_dealer > 21) m_status_msg += "Deaker bust!. ";
+    if (p_dealer > 21) m_status_msg += "Dealer bust!. ";
     
     RoundWinner result = checkWinner(p_player, p_dealer);
     if (result == RoundWinner::TIE)
