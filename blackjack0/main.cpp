@@ -15,7 +15,7 @@ extern void RunTests();
 int main(int argc, const char * argv[])
 {
     // check and run tests
-    if (argc == 2 && strcmp(argv[1], "test") == 0)
+    if (argc == 2 && std::string(argv[1]).compare("test") == 0)
     {
         RunTests();
         return 0;
