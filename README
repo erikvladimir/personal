@@ -30,3 +30,7 @@ Section 4. Unit tests
 -----------------------------
 Few unit tests were added to check selected methods, you can run them by
 > make build test
+
+Section 5. Requirements
+-----------------------------
+You to have ncurses and unicode support. Please check that your console it is at least 80x25.
