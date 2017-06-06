@@ -75,9 +75,14 @@ void VisualGame::draw()
     m_dealer.draw(7,  4);
     m_player.draw(14, 4);
     
+    const uint prop[] = {1, 23, 4, 55};
     if (m_status_msg.size() > 0)
     {
-        showMessageBox(1, 26, 4, 53, m_status_msg);
+        showMessageBox(prop[0], prop[1], prop[2], prop[3], m_status_msg);
+    }
+    else
+    {
+        drawBanner(prop[0], prop[1], prop[2], prop[3]);
     }
     
     // put cursor out of sight
@@ -96,6 +101,25 @@ void VisualGame::DrawRectangle(uint y, uint x, uint lines, uint columns)
             printw(" ");
         }
     }
+}
+
+void VisualGame::drawBanner(uint y, uint x, uint lines, uint columns) const
+{
+    std::vector<std::string> banner = {
+        " ____  __      __    ___  _  _   ____   __    ___  _  _ ",
+        "(  _ \\(  )    /__\\  / __)( )/ ) (_  _) /__\\  / __)( )/ )",
+        " ) _ < )(__  /(__)\\( (__  )  ( .-_)(  /(__)\\( (__  )  ( ",
+        "(____/(____)(__)(__)\\___)(_)\\_)\\____)(__)(__)\\___)(_)\\_)",
+        };
+        
+    attron(COLOR_PAIR(0));
+    DrawRectangle(y, x, lines, columns);
+    for (auto s : banner)
+    {
+        move(y++, x);
+        printw(s.c_str());
+    }
+    attroff(COLOR_PAIR(0));
 }
 
 void VisualGame::drawRoundMenu() const
@@ -137,7 +161,7 @@ void VisualGame::drawRoundMenu() const
 void VisualGame::drawScores() const
 {
     constexpr uint line = 1;
-    constexpr uint column = 4;
+    constexpr uint column = 2;
     
     attron(COLOR_PAIR(6));
     

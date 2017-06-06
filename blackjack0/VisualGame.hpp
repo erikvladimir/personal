@@ -23,6 +23,7 @@ class VisualGame : public Game
 private:
     void drawScores() const;
     void drawRoundMenu() const;
+    void drawBanner(uint y, uint x, uint lines, uint columns) const;
     void draw(uint y, uint x, Person person) const;
     static VisualGame * single_instance;
     VisualGame();
