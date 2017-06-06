@@ -26,7 +26,7 @@ private:
 public:
     static std::vector<int> computePoints(std::vector<Card> cards);
     
-    Person(std::string name, bool showPoints = true);
+    Person(std::string name = "person", bool showPoints = true);
     
     void giveCard(Card card, bool visible = true);
     std::vector<Card> collectCards();

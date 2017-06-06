@@ -31,6 +31,7 @@ public:
     void pileCards(const std::vector<Card> &in_cards);
     Card pop();
     void push(Card &card);
+    size_t getNumCards() const;
 };
 
 

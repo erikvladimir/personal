@@ -30,7 +30,7 @@ std::string Deck::print() const
 
 void Deck::pileCards(const std::vector<Card> &in_cards)
 {
-    std::copy(in_cards.begin(), in_cards.end(), m_cards.end());
+    std::copy(in_cards.begin(), in_cards.end(), std::back_inserter(m_cards));
 }
 
 Deck::Deck()
@@ -67,4 +67,9 @@ Card Deck::pop()
 void Deck::push(Card &card)
 {
     m_cards.push_back(card);
+}
+
+size_t Deck::getNumCards() const
+{
+    return m_cards.size();
 }
