@@ -30,8 +30,10 @@ void TEST_CHECK_WINNER()
 
 void TEST_COMPUTE_POINTS()
 {
-    // we will only check the max value to simplify the process
+    // we will mostly check the max value to simplify the process
     auto getMax = [](std::vector<int> v) -> int { return *std::max_element(v.begin(), v.end()); };
+    // min value can also be used to check some specific cases
+    auto getMin = [](std::vector<int> v) -> int { return *std::min_element(v.begin(), v.end()); };
     
     // empty case
     EXPECT_EQ(0, getMax(Person::computePoints(std::vector<Card>{ } )));
@@ -50,6 +52,24 @@ void TEST_COMPUTE_POINTS()
     
     // ACE as 1
     EXPECT_EQ(17, getMax(Person::computePoints(std::vector<Card>{ {HEARTS, C8}, {HEARTS, C8}, {SPADES, ACE} } )));
+    
+    // Two ACEs
+    auto hand1 = Person::computePoints(std::vector<Card>{ {HEARTS, ACE}, {SPADES, ACE} });
+    EXPECT_EQ(2u, hand1.size());
+    EXPECT_EQ(2, getMin(hand1));
+    EXPECT_EQ(12, getMax(hand1));
+    
+    // Three ACEs
+    auto hand2 = Person::computePoints(std::vector<Card>{ {HEARTS, ACE}, {SPADES, ACE}, {DIAMONDS, ACE} });
+    EXPECT_EQ(2u, hand2.size());
+    EXPECT_EQ(3, getMin(hand2));
+    EXPECT_EQ(13, getMax(hand2));
+
+    // Two ACEs and more cards
+    auto hand3 = Person::computePoints(std::vector<Card>{ {HEARTS, ACE}, {HEARTS, C2}, {DIAMONDS, C2}, {SPADES, ACE} });
+    EXPECT_EQ(2u, hand3.size());
+    EXPECT_EQ(6, getMin(hand3));
+    EXPECT_EQ(16, getMax(hand3));
 }
 
 
