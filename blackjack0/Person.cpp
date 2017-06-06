@@ -6,9 +6,11 @@
 //
 
 #include <algorithm>
+#include <set>
 
 #include "VisualGame.hpp"
 #include "Person.hpp"
+
 
 template<typename T> std::string vectorToString(std::vector<T> elements)
 {
@@ -40,37 +42,45 @@ std::vector<Card> Person::collectCards()
     return collected_cards;
 }
 
+/**
+ * This function returns all valid sums of points from a given hand.
+ * In case of ACEs, it will return more than one possible result.
+ * Note: this implementation a bit complex, if we we weren't printing all possible sums we chould simplify significantly the counting process. Only the maximum vaue of the results is relevant for the game logic. However showing all possible sums is a visual aid for the user.
+ */
 std::vector<int> Person::computePoints(std::vector<Card> cards)
 {
-    std::vector<int> results= {0};
+    std::vector<int> results {0};  // to store all possible valid sums (<=21)
+    std::set<int> values {0};  // to avoid duplicates
     
-    // add non-ACEs
+    // add base values (ACEs are counted as 1)
     for (auto card : cards)
     {
-        int value = card.value();
-        
-        if (value == CardName::ACE) continue;
-        
-        results[0] += value;
+        results[0] += card.value();;
     }
+    values.insert(results[0]);
     
     // add ACEs, first as ones, and if possible as 11s
     for (auto card : cards)
     {
-        for (auto &res : results)
+        if (card.value() == CardName::ACE)
         {
-            if (card.value() == CardName::ACE)
+            const size_t num = results.size();
+            for (size_t i=0; i<num; i++)
             {
+                // only add 10 since 1 was already added on previous loop
+                int new_result = results[i] + 10;
+                
                 // if 11 does not overflow
-                if (res <= 10)
+                if (new_result <= 21 &&
+                    values.find(new_result) == values.end())  // check value was not repeated
                 {
-                    results.push_back(res + 11);
+                    values.insert(new_result);
+                    results.push_back(new_result);
                 }
-                res += 1 ;
             }
         }
     }
-    
+
     return results;
 
 }
