@@ -120,10 +120,22 @@ void Person:: draw(uint y, uint x)
     // draw cards
     constexpr uint card_offset = 10u;
     uint offset = 16;
+    constexpr uint max_cards_visual = 6;
+    uint num_printed = 0;
     for (auto card : m_cards )
     {
         card.draw(y, x + offset);
         offset += card_offset;
+
+        //avoid printing too many cards
+        num_printed++;
+        if(num_printed >= max_cards_visual)
+        {
+            // print 3 points to indicate there are more cards in the hand
+            // the user will still have the number of points as a reference
+            VisualGame::showText(y+2, x+offset-3, 0, "...");
+            break;
+        }
     }
 }
 
